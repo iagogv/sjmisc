@@ -162,6 +162,7 @@ frq <- function(x,
                 auto.grp = NULL,
                 show.strings = TRUE,
                 show.na = TRUE,
+		show.if.labels = TRUE,
                 grp.strings = NULL,
                 min.frq = 0,
                 out = c("txt", "viewer", "browser"),
@@ -310,6 +311,7 @@ frq <- function(x,
               auto.grp = auto.grp,
               title = gr.title,
               show.na = show.na,
+              show.if.labels = show.if.labels,
               min.frq = min.frq
             )
 
@@ -343,6 +345,7 @@ frq <- function(x,
             auto.grp = auto.grp,
             title = title,
             show.na = show.na,
+            show.if.labels = show.if.labels,
             min.frq = min.frq
           )
 
@@ -370,7 +373,7 @@ frq <- function(x,
 #' @importFrom dplyr n_distinct full_join bind_rows
 #' @importFrom stats na.omit xtabs na.pass sd weighted.mean
 #' @importFrom sjlabelled get_labels get_label as_numeric
-frq_helper <- function(x, sort.frq, weight.by, cn, auto.grp, title = NULL, show.na = TRUE, min.frq = 0) {
+frq_helper <- function(x, sort.frq, weight.by, cn, auto.grp, title = NULL, show.na = TRUE, show.if.labels = TRUE, min.frq = 0) {
   # remember type
   vartype <- var_type(x)
 
@@ -608,6 +611,10 @@ frq_helper <- function(x, sort.frq, weight.by, cn, auto.grp, title = NULL, show.
   has.na <- mydat$frq[nrow(mydat)] > 0
   if ((!is.logical(show.na) && show.na == "auto" && !has.na) || identical(show.na, FALSE))
     mydat <- mydat[-nrow(mydat), ]
+
+  if (isFALSE(show.if.labels)) {
+	  mydat$label <- NULL
+  }
 
   # add variable label and type as attribute, for print-method
 
